@@ -433,6 +433,8 @@ typedef struct DecimateModifierData {
 	char delimit;   /* (mode == MOD_DECIM_MODE_DISSOLVE) */
 	char symmetry_axis; /* (mode == MOD_DECIM_MODE_COLLAPSE) */
 	float angle;    /* (mode == MOD_DECIM_MODE_DISSOLVE) */
+	float merge_dist;   /* (mode == MOD_DECIM_MODE_REMDOUBLES) */
+	float pad;
 
 	char defgrp_name[64];  /* MAX_VGROUP_NAME */
 	float defgrp_factor;
@@ -453,6 +455,7 @@ enum {
 	MOD_DECIM_MODE_COLLAPSE,
 	MOD_DECIM_MODE_UNSUBDIV,
 	MOD_DECIM_MODE_DISSOLVE,  /* called planar in the UI */
+	MOD_DECIM_MODE_REMDOUBLES,
 };
 
 typedef struct SmoothModifierData {

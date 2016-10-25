@@ -1522,6 +1522,7 @@ static void rna_def_modifier_decimate(BlenderRNA *brna)
 		{MOD_DECIM_MODE_COLLAPSE, "COLLAPSE", 0, "Collapse", "Use edge collapsing"},
 		{MOD_DECIM_MODE_UNSUBDIV, "UNSUBDIV", 0, "Un-Subdivide", "Use un-subdivide face reduction"},
 		{MOD_DECIM_MODE_DISSOLVE, "DISSOLVE", 0, "Planar", "Dissolve geometry to form planar polygons"},
+		{MOD_DECIM_MODE_REMDOUBLES, "REMDOUBLES", 0, "Doubles", "Remove duplicate vertices"},
 		{0, NULL, 0, NULL, NULL}
 	};
 
@@ -1563,6 +1564,14 @@ static void rna_def_modifier_decimate(BlenderRNA *brna)
 	RNA_def_property_range(prop, 0, DEG2RAD(180));
 	RNA_def_property_ui_range(prop, 0, DEG2RAD(180), 10, 2);
 	RNA_def_property_ui_text(prop, "Angle Limit", "Only dissolve angles below this (planar only)");
+	RNA_def_property_update(prop, 0, "rna_Modifier_update");
+
+	/* (mode == MOD_DECIM_MODE_REMDOUBLES) */
+	prop = RNA_def_property(srna, "merge_threshold", PROP_FLOAT, PROP_DISTANCE);
+	RNA_def_property_float_sdna(prop, NULL, "merge_dist");
+	RNA_def_property_range(prop, 0, FLT_MAX);
+	RNA_def_property_ui_range(prop, 0, 1, 1, 4);
+	RNA_def_property_ui_text(prop, "Merge Distance", "Limit below which to merge vertices");
 	RNA_def_property_update(prop, 0, "rna_Modifier_update");
 
 	/* (mode == MOD_DECIM_MODE_COLLAPSE) */

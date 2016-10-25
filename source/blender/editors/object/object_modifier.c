@@ -289,7 +289,7 @@ static bool object_modifier_remove(Main *bmain, Object *ob, ModifierData *md,
 	}
 	else if (md->type == eModifierType_Softbody) {
 		if (ob->soft) {
-			sbFree(ob->soft);
+			sbFree(ob->soft, ob);
 			ob->soft = NULL;
 			ob->softflag = 0;
 		}

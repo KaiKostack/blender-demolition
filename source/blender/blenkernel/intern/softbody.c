@@ -3633,22 +3633,22 @@ SoftBody *sbNew(Scene *scene)
 /* frees all */
 void sbFree(SoftBody *sb, Object *ob)
 {
+	// Kai's code
+	if (sb->demolitionlimit > 0) {	// free demolition
+		short demStatOfs = 0;
+		while (demName[demStatOfs][0] != '\0' && demStatOfs < demStatLen) {
+			if (strncmp(demName[demStatOfs], ob->id.name, sizeof(ob->id.name)) == 0) break;
+			else demStatOfs++;
+		}
+		printf("Freeing Demolition slot #%d.\n", demStatOfs);
+		if (demVdatIdx[demStatOfs] != NULL) MEM_freeN(demVdatIdx[demStatOfs]);
+	}
 	free_softbody_intern(sb);
 	BKE_ptcache_free_list(&sb->ptcaches);
 	sb->pointcache = NULL;
 	if (sb->effector_weights)
 		MEM_freeN(sb->effector_weights);
 	MEM_freeN(sb);
-	// Kai's code
-	if (sb->demolitionlimit > 0) {	// free demolition
-		short demStatOfs = 0;
-		while (demName[demStatOfs][0] != '\0' && demStatOfs < demStatLen) {	
-			if (strncmp(demName[demStatOfs], ob->id.name, sizeof(ob->id.name)) == 0) break;
-			else demStatOfs++;
-		}
-		printf("Freeing Demolition slot #%d.\n", demStatOfs);	
-		if (demVdatIdx[demStatOfs] != NULL) MEM_freeN(demVdatIdx[demStatOfs]);
-	}
 }
 
 void sbFreeSimulation(SoftBody *sb)

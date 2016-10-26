@@ -123,6 +123,9 @@ static DerivedMesh *applyModifier(ModifierData *md, Object *ob,
 			}
 			calc_face_normal = true;
 			break;
+		case MOD_DECIM_MODE_REMDOUBLES:
+			calc_face_normal = true;
+			break;
 		default:
 			return dm;
 	}
@@ -159,8 +162,12 @@ static DerivedMesh *applyModifier(ModifierData *md, Object *ob,
 		}
 	}
 
-	bm = DM_to_bmesh(dm, calc_face_normal);
-
+	//bm = DM_to_bmesh(dm, calc_face_normal);
+	const BMAllocTemplate allocsize = BMALLOC_TEMPLATE_FROM_DM(dm);
+	bm = BM_mesh_create(
+		&allocsize,
+		&((struct BMeshCreateParams){ .use_toolflags = true, }));
+	DM_to_bmesh_ex(dm, bm, true);
 	switch (dmd->mode) {
 		case MOD_DECIM_MODE_COLLAPSE:
 		{
